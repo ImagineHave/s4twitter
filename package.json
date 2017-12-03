@@ -18,5 +18,8 @@
   "homepage": "https://github.com/ImagineHave/s4twitter#readme",
   "dependencies": {
     "twit": "^2.2.9"
-  }
+  },
+  "scripts": {
+    "start": "node bot.js"
+}
 }
