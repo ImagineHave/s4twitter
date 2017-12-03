@@ -58,6 +58,8 @@ Twitter.stream('statuses/filter', {track: '@realDonaldTrump'}, function(stream) 
 
     //build our reply object
     var statusObj = {status: "Hi @" + tweet.user.screen_name + ", How are you?"}
+    
+    console.log(statusObj)
 
     //call the post function to tweet something
     //Twitter.post('statuses/update', statusObj,  function(error, tweetReply, response){
