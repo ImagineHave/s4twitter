@@ -60,6 +60,8 @@ var retweet = function() {
             var chapter = body['answer']['chapter']
             var verse = body['answer']['verse']
             
+            console.log(tweetid)
+            
             var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: tweetid };
             
             console.log(statusObj);
@@ -74,7 +76,6 @@ var retweet = function() {
                 //print the text of the tweet we sent out
                 console.log(tweetReply.text);
                 
-                console.log(response)
             });
         }
     };
@@ -86,7 +87,7 @@ var retweet = function() {
         
         console.log(data[0].text)
         var text = cleanString(data[0].text);
-        tweetid = data[0].id
+        tweetid = data[0].id_str
         
         console.log(text)
         
