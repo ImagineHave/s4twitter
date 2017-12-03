@@ -5,8 +5,6 @@ var
 
 var Twitter = new twit(config);
 
-var utf8 = require("utf8")
-
 var tweetid = 0
 var screen_name = 'realDonaldTrump'
 
