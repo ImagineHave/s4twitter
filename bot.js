@@ -8,9 +8,8 @@ var Twitter = new twit(config);
 var tweetid = 0
 var screen_name = 'realDonaldTrump'
 
-// RETWEET BOT ==========================
+// REPLY BOT ==========================
 
-// find latest tweet according the query 'q' in params
 var retweet = function() {
 
     function cleanString(input) {
@@ -85,6 +84,12 @@ var retweet = function() {
         
         console.log(data[0].text)
         var text = cleanString(data[0].text);
+        
+        if (tweetid === data[0].id_str){
+            console.log("already done")
+            return 
+        } 
+        
         tweetid = data[0].id_str
         
         console.log(text)
@@ -120,6 +125,6 @@ var retweet = function() {
 // grab & retweet as soon as program is running...
 retweet();
 // retweet in every 50 minutes
-setInterval(retweet, 1500000);
+setInterval(retweet, 15000);
 
 
