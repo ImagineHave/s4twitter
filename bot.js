@@ -197,8 +197,8 @@ function randomRetweet() {
     }
     
   var 
-    min = 906000,
-    max = 186000;
+    min = 1860000,
+    max = 3660000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
   console.log("Timeout retweet for : " + rand)
