@@ -119,7 +119,7 @@ var reply = function() {
 
 var retweet = function() {
     var params = {
-        q: '@MSF OR @MindCharity OR @amnesty OR @SSChospices OR @hrw OR @UNHumanRights OR @macmillancancer OR @CR_UK OR @NSPCC OR #UKCharityWeek',  // REQUIRED
+        q: '@MSF OR @MindCharity OR @amnesty OR @SSChospices OR @hrw OR @UNHumanRights OR @macmillancancer OR @CR_UK OR @NSPCC OR #UKCharityWeek OR @Network4Africa',  // REQUIRED
         //q: '#UKCharityWeek, #ukcharityweek',
         result_type: 'recent',
         lang: 'en'
