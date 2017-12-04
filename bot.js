@@ -130,8 +130,6 @@ var retweet = function() {
         // if there no errors
         if (!err) {
             
-            console.log(data);
-            
             if(data.statuses.length > 0) {
                 
                 var 
@@ -183,7 +181,7 @@ function randomReply() {
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
   console.log("Timeout reply for : " + rand)
-  setTimeout(randomRetweet, rand);
+  setTimeout(randomReply, rand);
 }
 
 randomReply();
