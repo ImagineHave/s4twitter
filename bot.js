@@ -5,8 +5,8 @@ var
 
 var Twitter = new twit(config);
 
-var tweetid = 0
-var screen_name = 'realDonaldTrump'
+var tweetid = 0;
+var screen_name = 'realDonaldTrump';
 
 // REPLY BOT ==========================
 
@@ -26,18 +26,6 @@ var retweet = function() {
         screen_name: screen_name,  
         result_type: 'recent',
         lang: 'en'
-    }
-    
-    
-    var twitter = function(error, tweetReply, response){
-        
-        //if we get an error print it out
-        if(error){
-            console.log(error);
-        }
-        
-        //print the text of the tweet we sent out
-        console.log(tweetReply.text);
     };
     
     var callback = function(error, response, body) {
@@ -50,20 +38,20 @@ var retweet = function() {
             
             //build our reply object
             
-            var body = JSON.parse(body);
+            body = JSON.parse(body);
             
-            var passage = body['answer']['passage']
-            var book = body['answer']['book']
+            var passage = body['answer']['passage'];
+            var book = body['answer']['book'];
             
             if (book.match(/^\d/)) {
-                var number = book.substring(1)
-                book += number
+                var number = book.substring(1);
+                book += number;
             }       
             
-            var chapter = body['answer']['chapter']
-            var verse = body['answer']['verse']
+            var chapter = body['answer']['chapter'];
+            var verse = body['answer']['verse'];
             
-            console.log(tweetid)
+            console.log(tweetid);
             
             var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+":"+chapter+":"+verse, in_reply_to_status_id: tweetid };
             
@@ -86,19 +74,19 @@ var retweet = function() {
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
         
-        console.log(data[0])
+        console.log(data[0]);
         
-        console.log(data[0].text)
+        console.log(data[0].text);
         var text = cleanString(data[0].text);
         
         if (tweetid === data[0].id_str){
-            console.log("already done")
-            return 
+            console.log("already done");
+            return;
         } 
         
-        tweetid = data[0].id_str
+        tweetid = data[0].id_str;
         
-        console.log(text)
+        console.log(text);
         
         var request = require('request');
     
@@ -118,7 +106,7 @@ var retweet = function() {
         
         // if there no errors
         if (!err) {
-            console.log("sending request")
+            console.log("sending request");
             request(options, callback);
         }
         // if unable to Search a tweet
@@ -126,11 +114,10 @@ var retweet = function() {
           console.log('Something went wrong while searching');
         }
     });
-}
+};
 
 // grab & retweet as soon as program is running...
 retweet();
-// retweet in every 50 minutes
-setInterval(retweet, 900000);
+setInterval(retweet, 1000);
 
 
