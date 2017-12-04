@@ -136,7 +136,7 @@ var retweet = function() {
                     min = 0,
                     max = data.statuses.length;
                 
-                var i = Math.floor(Math.random() * (max - min + 1) + min); 
+                var i = Math.floor(Math.random() * (max - min) + min); 
                 
                 // grab ID of tweet to retweet
                 var retweetId = data.statuses[i].id_str;
