@@ -119,20 +119,29 @@ var reply = function() {
 
 var retweet = function() {
     var params = {
-        q: '@MSF', //@MindCharity, @amnesty, @SSChospices, @hrw, @UNHumanRights, @macmillancancer, @CR_UK, @NSPCC, #UKCharityWeek',  // REQUIRED
+        q: '@MSF OR @MindCharity OR @amnesty OR @SSChospices OR @hrw OR @UNHumanRights OR @macmillancancer OR @CR_UK OR @NSPCC OR #UKCharityWeek',  // REQUIRED
         //q: '#UKCharityWeek, #ukcharityweek',
         result_type: 'recent',
         lang: 'en'
-    }
+    };
     // for more parameters, see: https://dev.twitter.com/rest/reference/get/search/tweets
 
     Twitter.get('search/tweets', params, function(err, data) {
-      // if there no errors
+        // if there no errors
         if (!err) {
-            console.log(data)
+            
+            console.log(data);
+            
             if(data.statuses.length > 0) {
+                
+                var 
+                    min = 0,
+                    max = data.statuses.length;
+                
+                var i = Math.floor(Math.random() * (max - min + 1) + min); 
+                
                 // grab ID of tweet to retweet
-                var retweetId = data.statuses[0].id_str;
+                var retweetId = data.statuses[i].id_str;
                 // Tell TWITTER to retweet
                 Twitter.post('statuses/retweet/:id', {
                     id: retweetId
@@ -142,22 +151,60 @@ var retweet = function() {
                     }
                     // if there was an error while tweeting
                     if (err) {
-                        console.log('Something went wrong while RETWEETING... Duplication maybe...');
+                        console.log(err);
                     }
                 });
             }
         }
         // if unable to Search a tweet
         else {
-          console.log('Something went wrong while SEARCHING...');
+          console.log(err);
         }
     });
 };
 
 
-reply();
-retweet();
-setInterval(reply, 10000);
-setInterval(retweet, 906000);
+//reply();
+//retweet();
+//setInterval(reply, 10000);
+//setInterval(retweet, 906000);
+function randomReply() {
+    
+    var hour = new Date().getHours();
+    // if the time is between 7am and 9pm
+    if(hour > 7 && hour < 21) {
+        // retweet
+        reply();
+    }
+    
+  var 
+    min = 1000,
+    max = 10000;
+    
+  var rand = Math.floor(Math.random() * (max - min + 1) + min); 
+  console.log("Timeout reply for : " + rand)
+  setTimeout(randomRetweet, rand);
+}
+
+randomReply();
 
 
+function randomRetweet() {
+    
+    var hour = new Date().getHours();
+    // if the time is between 7am and 9pm
+    if(hour > 7 && hour < 21) {
+        // retweet
+        retweet();
+    }
+    
+  var 
+    min = 906000,
+    max = 186000;
+    
+  var rand = Math.floor(Math.random() * (max - min + 1) + min); 
+  console.log("Timeout retweet for : " + rand)
+  setTimeout(randomRetweet, rand);
+}
+
+randomRetweet();
