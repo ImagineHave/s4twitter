@@ -158,6 +158,6 @@ var retweet = function() {
 reply();
 retweet();
 setInterval(reply, 10000);
-setInterval(retweet, 900000);
+setInterval(retweet, 906000);
 
 
