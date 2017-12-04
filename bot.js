@@ -61,7 +61,7 @@ var reply = function() {
 
                 //if we get an error print it out
                 if(error){
-                console.log(error);
+                    console.log(error);
                 }
                 
                 //print the text of the tweet we sent out
@@ -74,7 +74,7 @@ var reply = function() {
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
         
-        console.log(data[0]);
+        //console.log(data[0]);
         
         console.log(data[0].text);
         var text = cleanString(data[0].text);
@@ -119,7 +119,7 @@ var reply = function() {
 
 var retweet = function() {
     var params = {
-        q: '@Network4Africa, @MSF, @MindCharity, @amnesty, @SSChospices',  // REQUIRED
+        q: '@MSF, @MindCharity, @amnesty, @SSChospices, @hrw, @UNHumanRights, @macmillancancer, @CR_UK, @NSPCC',  // REQUIRED
         result_type: 'recent',
         lang: 'en'
     }
@@ -128,32 +128,35 @@ var retweet = function() {
     Twitter.get('search/tweets', params, function(err, data) {
       // if there no errors
         if (!err) {
-          // grab ID of tweet to retweet
-            var retweetId = data.statuses[0].id_str;
-            // Tell TWITTER to retweet
-            Twitter.post('statuses/retweet/:id', {
-                id: retweetId
-            }, function(err, response) {
-                if (response) {
-                    console.log('Retweeted!!!');
-                }
-                // if there was an error while tweeting
-                if (err) {
-                    console.log('Something went wrong while RETWEETING... Duplication maybe...');
-                }
-            });
+            console.log(data)
+            if(data.statuses.length > 0) {
+                // grab ID of tweet to retweet
+                var retweetId = data.statuses[0].id_str;
+                // Tell TWITTER to retweet
+                Twitter.post('statuses/retweet/:id', {
+                    id: retweetId
+                }, function(err, response) {
+                    if (response) {
+                        console.log('Retweeted!!!');
+                    }
+                    // if there was an error while tweeting
+                    if (err) {
+                        console.log('Something went wrong while RETWEETING... Duplication maybe...');
+                    }
+                });
+            }
         }
         // if unable to Search a tweet
         else {
           console.log('Something went wrong while SEARCHING...');
         }
     });
-}
+};
 
 
 reply();
-retweet()
-setInterval(reply, 1000);
-setInterval(reply, 900000);
+retweet();
+setInterval(reply, 10000);
+setInterval(retweet, 900000);
 
 
