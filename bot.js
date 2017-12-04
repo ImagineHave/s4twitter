@@ -54,12 +54,18 @@ var retweet = function() {
             
             var passage = body['answer']['passage']
             var book = body['answer']['book']
+            
+            if (book.match(/^\d/)) {
+                var number = book.substring(1)
+                book += number
+            }       
+            
             var chapter = body['answer']['chapter']
             var verse = body['answer']['verse']
             
             console.log(tweetid)
             
-            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+":"+chapter+":"+verse, in_reply_to_status_id: tweetid };
             
             console.log(statusObj);
             
