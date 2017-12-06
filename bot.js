@@ -7,6 +7,19 @@ var Twitter = new twit(config);
 
 var tweetid = 0;
 var screen_name = 'realDonaldTrump';
+var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
+
+function franksCharities(){
+    
+    var output = [];
+    
+    for(var i = 0; i < frankscharities.length; i++){
+        output[i] = '@'+frankscharities[i];
+    }
+    
+    return output;
+    
+}
 
 // REPLY BOT ==========================
 
@@ -116,11 +129,27 @@ var reply = function() {
     });
 };
 
+// we only want the genuine article, and we don't want trump chat
+function stripList(data) {
+    
+    var list = [];
+    
+    for (var i = 0; i < data.statuses.length; i++) {
+        var status = data.statuses[i];
+        if(frankscharities.indexOf(status.user.screen_name) !== -1){
+            if(status.text.indexOf(screen_name) === -1) {
+                list[i] = data.statuses[i];
+            }
+        }
+    }
+    
+    return list;
+}
+
 
 var retweet = function() {
     var params = {
-        q: '@MSF OR @MindCharity OR @amnesty OR @SSChospices OR @hrw OR @UNHumanRights OR @macmillancancer OR @CR_UK OR @NSPCC OR #UKCharityWeek OR @Network4Africa',  // REQUIRED
-        //q: '#UKCharityWeek, #ukcharityweek',
+        q: franksCharities().join(" OR "),
         result_type: 'recent',
         lang: 'en'
     };
@@ -130,22 +159,24 @@ var retweet = function() {
         // if there no errors
         if (!err) {
             
-            if(data.statuses.length > 0) {
+            data = stripList(data)
+            
+            if(data.length > 0) {
                 
                 var 
                     min = 0,
-                    max = data.statuses.length;
+                    max = data.length;
                 
+                // randomise the charity
                 var i = Math.floor(Math.random() * (max - min) + min); 
                 
-                // grab ID of tweet to retweet
-                var retweetId = data.statuses[i].id_str;
-                // Tell TWITTER to retweet
+                var retweetId = data[i].id_str;
+                
                 Twitter.post('statuses/retweet/:id', {
                     id: retweetId
                 }, function(err, response) {
                     if (response) {
-                        console.log('Retweeted!!!');
+                        console.log('Retweeted');
                     }
                     // if there was an error while tweeting
                     if (err) {
@@ -162,10 +193,9 @@ var retweet = function() {
 };
 
 
-//reply();
-//retweet();
-//setInterval(reply, 10000);
-//setInterval(retweet, 906000);
+reply();
+retweet();
+
 function randomReply() {
     
     var hour = new Date().getHours();
@@ -180,12 +210,10 @@ function randomReply() {
     max = 10000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
-  console.log("Timeout reply for : " + rand)
+  console.log("Timeout reply for : " + rand);
   setTimeout(randomReply, rand);
 }
-
 randomReply();
-
 
 function randomRetweet() {
     
@@ -201,8 +229,7 @@ function randomRetweet() {
     max = 3660000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
-  console.log("Timeout retweet for : " + rand)
+  console.log("Timeout retweet for : " + rand);
   setTimeout(randomRetweet, rand);
 }
-
 randomRetweet();
