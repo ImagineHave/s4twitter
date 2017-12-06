@@ -59,7 +59,8 @@ var replyToTrump = function() {
             var book = body['answer']['book'];
             
             if (book.match(/^\d/)) {
-                var number = book.substring(1);
+                var number = book.substring(1,1);
+                book = book.substring(1)
                 book += number;
             }       
             
@@ -162,9 +163,10 @@ var reply = function() {
             var book = body['answer']['book'];
             
             if (book.match(/^\d/)) {
-                var number = book.substring(1);
+                var number = book.substring(1,1);
+                book = book.substring(1)
                 book += number;
-            }       
+            }      
             
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
@@ -356,7 +358,7 @@ function randomReply() {
     max = 300000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
-  console.log("Timeout retweet for : " + rand);
+  console.log("Timeout reply for : " + rand);
   setTimeout(randomReply, rand);
 }
 randomReply();
