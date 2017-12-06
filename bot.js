@@ -6,7 +6,9 @@ var
 var Twitter = new twit(config);
 
 var tweetid = 0;
+var replyid = 0;
 var screen_name = 'realDonaldTrump';
+var reply_screen_name = '';
 var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
 
 function franksCharities(){
@@ -21,9 +23,9 @@ function franksCharities(){
     
 }
 
-// REPLY BOT ==========================
+// replyToTrump BOT ==========================
 
-var reply = function() {
+var replyToTrump = function() {
 
     function cleanString(input) {
         var output = "";
@@ -129,6 +131,111 @@ var reply = function() {
     });
 };
 
+
+// REPLY TO ANYONE STUFF
+
+var reply = function() {
+
+    function cleanString(input) {
+        var output = "";
+        for (var i=0; i<input.length; i++) {
+            if (input.charCodeAt(i) <= 127) {
+                output += input.charAt(i);
+            }
+        }
+        return output;
+    }
+    
+    var callback = function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // Print out the response body
+            console.log(body);
+            
+            // print out the text of the tweet that came in
+            //console.log(tweet.text);
+            
+            //build our reply object
+            
+            body = JSON.parse(body);
+            
+            var passage = body['answer']['passage'];
+            var book = body['answer']['book'];
+            
+            if (book.match(/^\d/)) {
+                var number = book.substring(1);
+                book += number;
+            }       
+            
+            var chapter = body['answer']['chapter'];
+            var verse = body['answer']['verse'];
+            
+            console.log(tweetid);
+            
+            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+":"+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            
+            console.log(statusObj);
+            
+            Twitter.post('statuses/update', statusObj,  function(error, tweetReply, response){
+
+                //if we get an error print it out
+                if(error){
+                    console.log(error);
+                }
+                
+                //print the text of the tweet we sent out
+                console.log(tweetReply.text);
+                
+            });
+        }
+    };
+    
+    
+    Twitter.get('statuses/statuses/mentions_timeline', function(err, data) {
+        
+        console.log(data[0].text);
+        var text = cleanString(data[0].text);
+        
+        if (replyid === data[0].id_str){
+            console.log("already done");
+            return;
+        } 
+        
+        replyid = data[0].id_str;
+        reply_screen_name = data[0].user.screen_name;
+        
+        console.log(text);
+        
+        var request = require('request');
+    
+        // Set the headers
+        var headers = {
+            'User-Agent':       'Super Agent/0.0.1',
+            'Content-Type':     'application/x-www-form-urlencoded'
+        };
+        
+        // Configure the request
+        var options = {
+            url: 'https://s4j.imagine-have.xyz/s4j/p/',
+            method: 'POST',
+            headers: headers,
+            form: {'prayer':  JSON.stringify( text ) }
+        };
+        
+        // if there no errors
+        if (!err) {
+            console.log("sending request");
+            request(options, callback);
+        }
+        // if unable to Search a tweet
+        else {
+          console.log('Something went wrong while searching');
+        }
+    });
+};
+
+
+// RETWEET STUFF
+
 // we only want the genuine article, and we don't want trump chat
 function stripList(data) {
     
@@ -193,16 +300,16 @@ var retweet = function() {
 };
 
 
-reply();
+replyToTrump();
 retweet();
 
-function randomReply() {
+function randomreplyToTrump() {
     
     var hour = new Date().getHours();
     // if the time is between 7am and 9pm
     if(hour > 7 && hour < 21) {
         // retweet
-        reply();
+        replyToTrump();
     }
     
   var 
@@ -210,10 +317,10 @@ function randomReply() {
     max = 10000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
-  console.log("Timeout reply for : " + rand);
-  setTimeout(randomReply, rand);
+  console.log("Timeout replyToTrump for : " + rand);
+  setTimeout(randomreplyToTrump, rand);
 }
-randomReply();
+randomreplyToTrump();
 
 function randomRetweet() {
     
@@ -233,3 +340,23 @@ function randomRetweet() {
   setTimeout(randomRetweet, rand);
 }
 randomRetweet();
+
+
+function randomReply() {
+    
+    var hour = new Date().getHours();
+    // if the time is between 7am and 9pm
+    if(hour > 7 && hour < 3) {
+        // retweet
+        reply();
+    }
+    
+  var 
+    min = 3000,
+    max = 300000;
+    
+  var rand = Math.floor(Math.random() * (max - min + 1) + min); 
+  console.log("Timeout retweet for : " + rand);
+  setTimeout(randomReply, rand);
+}
+randomReply();
