@@ -58,10 +58,12 @@ var replyToTrump = function() {
             var passage = body['answer']['passage'];
             var book = body['answer']['book'];
             
+            book = book.trim();
+            
             if (book.match(/^\d/)) {
-                var number = book.substring(1,1);
-                book = book.substring(1)
-                book += number;
+                var number = book.substring(0,1);
+                book = book.substring(1);
+                book += " " + number;
             }       
             
             var chapter = body['answer']['chapter'];
@@ -147,6 +149,10 @@ var reply = function() {
         return output;
     }
     
+    var params = {
+        count: 1
+    };
+    
     var callback = function(error, response, body) {
         if (!error && response.statusCode == 200) {
             // Print out the response body
@@ -162,10 +168,13 @@ var reply = function() {
             var passage = body['answer']['passage'];
             var book = body['answer']['book'];
             
+            
+            book = book.trim()
+            
             if (book.match(/^\d/)) {
-                var number = book.substring(1,1);
+                var number = book.substring(0,1);
                 book = book.substring(1)
-                book += number;
+                book += " " + number;
             }      
             
             var chapter = body['answer']['chapter'];
@@ -192,9 +201,9 @@ var reply = function() {
     };
     
     
-    Twitter.get('statuses/statuses/mentions_timeline', function(err, data) {
+    Twitter.get('statuses/mentions_timeline', params, function(err, data) {
         
-        console.log(data[0].text);
+        console.log("mentions" + data[0]);
         var text = cleanString(data[0].text);
         
         if (replyid === data[0].id_str){
@@ -304,6 +313,7 @@ var retweet = function() {
 
 replyToTrump();
 retweet();
+reply();
 
 function randomreplyToTrump() {
     
@@ -343,7 +353,6 @@ function randomRetweet() {
 }
 randomRetweet();
 
-
 function randomReply() {
     
     var hour = new Date().getHours();
@@ -355,7 +364,7 @@ function randomReply() {
     
   var 
     min = 3000,
-    max = 300000;
+    max = 30000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
   console.log("Timeout reply for : " + rand);
