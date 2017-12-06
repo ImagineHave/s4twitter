@@ -71,7 +71,7 @@ var replyToTrump = function() {
             
             console.log(tweetid);
             
-            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+":"+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" :"+chapter+":"+verse, in_reply_to_status_id: tweetid };
             
             console.log(statusObj);
             
@@ -182,7 +182,7 @@ var reply = function() {
             
             console.log(tweetid);
             
-            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+":"+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" :"+chapter+":"+verse, in_reply_to_status_id: tweetid };
             
             console.log(statusObj);
             
