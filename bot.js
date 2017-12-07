@@ -13,7 +13,14 @@ var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'U
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
+var dbase = db.db("heroku_npbd96ms");
 
+
+// Set the headers
+var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded'
+};
 
 // MongoClient.connect(url, function(err, db) {
 //     if (err) throw err;
@@ -40,6 +47,8 @@ function franksCharities(){
 // replyToTrump BOT ==========================
 
 var replyToTrump = function() {
+    
+    var alreadyExists = false; 
 
     function cleanString(input) {
         var output = "";
@@ -105,72 +114,52 @@ var replyToTrump = function() {
     
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
+        var localTweetId = data[0].id_str;
         
-        //console.log(data[0]);
-        
-        console.log(data[0].text);
-        var text = cleanString(data[0].text);
-        
-        var flag = false; 
-        var myobj = { tweetid: data[0].id_str };
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbase = db.db("heroku_npbd96ms");
-            dbase.collection("tweetids").findOne(myobj, function(err, result) {
-                if (err) throw err;
-                
-                if(result.tweetid === data[0].id_str){
-                    flag = true;
-                    console.log("already posted/replied");
-                }
-                
-                db.close();
-            });
-        });
-        
-        if(flag){
-            console.log("exit function");
+        if(err) {
+            console.log(err);
             return;
-        }
-
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbase = db.db("heroku_npbd96ms");
-            dbase.collection("tweetids").insertOne(myobj, function(err, res) {
-                if (err) throw err;
-                console.log("1 document inserted");
+        } else { 
+            var text = cleanString(data[0].text);
+            var myobj = {tweetid:localTweetId};
+            MongoClient.connect(url, function(err, db) {
+                
+                if (err) {
+                    console.log(err);
+                } else {
+                    dbase.collection("tweetids").findOne(myobj, function(err, result) {
+                        
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            if(result.tweetid === localTweetId){
+                                console.log("already posted/replied");
+                            } else {
+                                dbase.collection("tweetids").insertOne(myobj, function(err, res) {
+                                    if (err) throw err;
+                                    console.log("inserted: " + localTweetId);
+                                });
+                                
+                                trumpid = localTweetId;
+                                var request = require('request');
+                                
+                                // Configure the request
+                                var options = {
+                                    url: 'https://s4j.imagine-have.xyz/s4j/p/',
+                                    method: 'POST',
+                                    headers: headers,
+                                    form: {'prayer':  JSON.stringify( text ) }
+                                };
+                                
+                                console.log("sending request");
+                                request(options, callback);
+                                
+                            } 
+                        }
+                    });
+                }
                 db.close();
             });
-        });
-        
-        trumpid = data[0].id_str;
-        
-        console.log(text);
-        
-        var request = require('request');
-    
-        // Set the headers
-        var headers = {
-            'User-Agent':       'Super Agent/0.0.1',
-            'Content-Type':     'application/x-www-form-urlencoded'
-        };
-        
-        // Configure the request
-        var options = {
-            url: 'https://s4j.imagine-have.xyz/s4j/p/',
-            method: 'POST',
-            headers: headers,
-            form: {'prayer':  JSON.stringify( text ) }
-        };
-        
-        // if there no errors
-        if (!err) {
-            console.log("sending request");
-            request(options, callback);
-        }
-        // if unable to Search a tweet
-        else {
-          console.log('Something went wrong while searching');
         }
     });
 };
@@ -243,75 +232,56 @@ var reply = function() {
     
     
     Twitter.get('statuses/mentions_timeline', params, function(err, data) {
-        
-        console.log("mentions" + data[0]);
-        var text = cleanString(data[0].text);
-        
-        var flag = false; 
-        var myobj = { tweetid: data[0].id_str };
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbase = db.db("heroku_npbd96ms");
-            dbase.collection("tweetids").findOne(myobj, function(err, result) {
-                if (err) throw err;
-                
-                if(result.tweetid === data[0].id_str){
-                    flag = true;
-                    console.log("already posted/replied");
-                }
-                
-                db.close();
-            });
-        });
-        
-        if(flag){
-            console.log("exit function")
-            return;
-        }
-
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbase = db.db("heroku_npbd96ms");
-            dbase.collection("tweetids").insertOne(myobj, function(err, res) {
-                if (err) throw err;
-                console.log("1 document inserted");
-                db.close();
-            });
-        });
-        
-        replyid = data[0].id_str;
+        var localTweetId = data[0].id_str;
         reply_screen_name = data[0].user.screen_name;
-        
-        console.log(text);
-        
-        var request = require('request');
-    
-        // Set the headers
-        var headers = {
-            'User-Agent':       'Super Agent/0.0.1',
-            'Content-Type':     'application/x-www-form-urlencoded'
-        };
-        
-        // Configure the request
-        var options = {
-            url: 'https://s4j.imagine-have.xyz/s4j/p/',
-            method: 'POST',
-            headers: headers,
-            form: {'prayer':  JSON.stringify( text ) }
-        };
-        
-        // if there no errors
-        if (!err) {
-            console.log("sending request");
-            request(options, callback);
+        if(err) {
+            console.log(err);
+            return;
+        } else { 
+            var text = cleanString(data[0].text);
+            var myobj = {tweetid:localTweetId};
+            MongoClient.connect(url, function(err, db) {
+                
+                if (err) {
+                    console.log(err);
+                } else {
+                    dbase.collection("tweetids").findOne(myobj, function(err, result) {
+                        
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            if(result.tweetid === localTweetId){
+                                console.log("already posted/replied");
+                            } else {
+                                dbase.collection("tweetids").insertOne(myobj, function(err, res) {
+                                    if (err) throw err;
+                                    console.log("inserted: " + localTweetId);
+                                });
+                                
+                                replyid = localTweetId;
+                                var request = require('request');
+                                
+                                // Configure the request
+                                var options = {
+                                    url: 'https://s4j.imagine-have.xyz/s4j/p/',
+                                    method: 'POST',
+                                    headers: headers,
+                                    form: {'prayer':  JSON.stringify( text ) }
+                                };
+                                
+                                console.log("sending request");
+                                request(options, callback);
+                                
+                            } 
+                        }
+                    });
+                }
+                db.close();
+            });
         }
-        // if unable to Search a tweet
-        else {
-          console.log('Something went wrong while searching');
-        }
-    });
-};
+    });        
 
+};
 
 // RETWEET STUFF
 
