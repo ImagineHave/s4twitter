@@ -15,15 +15,15 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
 
 
-MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbase = db.db("heroku_npbd96ms");
-    dbase.createCollection("tweetids", function(err, res) {
-        if (err) throw err;
-        console.log("Collection created!");
-        db.close();
-    });
-});
+// MongoClient.connect(url, function(err, db) {
+//     if (err) throw err;
+//     var dbase = db.db("heroku_npbd96ms");
+//     dbase.createCollection("tweetids", function(err, res) {
+//         if (err) throw err;
+//         console.log("Collection created!");
+//         db.close();
+//     });
+// });
 
 function franksCharities(){
     
@@ -125,7 +125,6 @@ var replyToTrump = function() {
                 }
                 
                 db.close();
-                return;
             });
         });
         
@@ -261,7 +260,6 @@ var reply = function() {
                 }
                 
                 db.close();
-                return;
             });
         });
         
