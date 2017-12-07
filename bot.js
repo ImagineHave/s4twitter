@@ -242,8 +242,11 @@ var reply = function() {
                                 console.log("already posted/replied");
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
-                                    if (err) throw err;
-                                    console.log("inserted: " + localTweetId);
+                                    if (err) { 
+                                        console.log(localTweetId);
+                                    } else {
+                                        console.log("inserted: " + localTweetId);
+                                    }
                                 });
                                 
                                 replyid = localTweetId;
