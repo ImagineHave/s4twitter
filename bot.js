@@ -32,15 +32,15 @@ function getOptions(text) {
 
 
 // Enable when you need a new database
-// MongoClient.connect(url, function(err, db) {
-//     if (err) throw err;
-//     var dbase = db.db("heroku_npbd96ms");
-//     dbase.createCollection("tweetids", function(err, res) {
-//         if (err) throw err;
-//         console.log("Collection created!");
-//         db.close();
-//     });
-// });
+MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbase = db.db("heroku_npbd96ms");
+    dbase.createCollection("tweetids", function(err, res) {
+        if (err) throw err;
+        console.log("Collection created!");
+        db.close();
+    });
+});
 
 function franksCharities(){
     
@@ -111,6 +111,7 @@ var replyToTrump = function() {
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
         console.log("trump spoke");
+        console.log(data[0].text);
         var localTweetIdt = data[0].id_str;
         console.log(localTweetIdt);
         console.log(trump_screen_name);
@@ -122,6 +123,8 @@ var replyToTrump = function() {
             var text = cleanString(data[0].text);
             var myobj = {tweetid:localTweetIdt};
             MongoClient.connect(url, function(err, db) {
+                
+                console.log("checking for previous trump replies");
                 
                 if (err) {
                     console.log(err);
@@ -137,6 +140,7 @@ var replyToTrump = function() {
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
                                     if (err) { 
+                                        console.log("error inserting id");
                                         console.log(localTweetIdt);
                                     } else {
                                         console.log("inserted: " + localTweetIdt);
@@ -220,6 +224,7 @@ var reply = function() {
     Twitter.get('statuses/mentions_timeline', params, function(err, data) {
         
         console.log("getting mentions");
+        console.log(data[0].text);
         var localTweetId = data[0].id_str;
         reply_screen_name = data[0].user.screen_name;
         console.log(localTweetId);
@@ -249,6 +254,7 @@ var reply = function() {
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
                                     if (err) { 
+                                        console.log("error inserting id");
                                         console.log(localTweetId);
                                     } else {
                                         console.log("inserted: " + localTweetId);
