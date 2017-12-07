@@ -14,6 +14,7 @@ var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'U
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
 
+
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   db.createCollection("tweetids", function(err, res) {
@@ -117,7 +118,8 @@ var replyToTrump = function() {
         var myobj = { tweetid: data[0].id_str };
         MongoClient.connect(url, function(err, db) {
           if (err) throw err;
-          db.collection("tweetids").findOne(myobj, function(err, result) {
+          var dbase = db.db("heroku_npbd96ms");
+          dbase.collection("tweetids").findOne(myobj, function(err, result) {
             if (err) throw err;
             if(Object.keys(result).length === 0 && result.constructor === Object){
                 return;
@@ -128,7 +130,8 @@ var replyToTrump = function() {
 
         MongoClient.connect(url, function(err, db) {
           if (err) throw err;
-          db.collection("tweetids").insertOne(myobj, function(err, res) {
+          var dbase = db.db("heroku_npbd96ms");
+          dbase.collection("tweetids").insertOne(myobj, function(err, res) {
             if (err) throw err;
             console.log("1 document inserted");
             db.close();
@@ -247,7 +250,8 @@ var reply = function() {
         var myobj = { tweetid: data[0].id_str };
         MongoClient.connect(url, function(err, db) {
           if (err) throw err;
-          db.collection("tweetids").findOne(myobj, function(err, result) {
+          var dbase = db.db("heroku_npbd96ms");
+          dbase.collection("tweetids").findOne(myobj, function(err, result) {
             if (err) throw err;
             if(Object.keys(result).length === 0 && result.constructor === Object){
                 return;
@@ -258,7 +262,8 @@ var reply = function() {
 
         MongoClient.connect(url, function(err, db) {
           if (err) throw err;
-          db.collection("tweetids").insertOne(myobj, function(err, res) {
+          var dbase = db.db("heroku_npbd96ms");
+          dbase.collection("tweetids").insertOne(myobj, function(err, res) {
             if (err) throw err;
             console.log("1 document inserted");
             db.close();
