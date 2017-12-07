@@ -7,7 +7,7 @@ var Twitter = new twit(config);
 
 var trumpid = 0;
 var replyid = 0;
-var screen_name = 'realDonaldTrump';
+var trump_screen_name = 'realDonaldTrump';
 var reply_screen_name = '';
 var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
 
@@ -69,7 +69,7 @@ var replyToTrump = function() {
     }
     
     var params = {
-        screen_name: screen_name,  
+        screen_name: trump_screen_name,  
         result_type: 'recent',
         lang: 'en'
     };
@@ -92,7 +92,7 @@ var replyToTrump = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: trumpid };
+            var statusObj = {status: "@"+trump_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: trumpid };
             
             Twitter.post('statuses/update', statusObj,  function(error, tweetReply, response){
 
@@ -111,17 +111,16 @@ var replyToTrump = function() {
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
         console.log("trump spoke");
-        var localTweetId = data[0].id_str;
-        reply_screen_name = data[0].user.screen_name;
-        console.log(localTweetId);
-        console.log(screen_name);
+        var localTweetIdt = data[0].id_str;
+        console.log(localTweetIdt);
+        console.log(trump_screen_name);
         
         if(err) {
             console.log(err);
             return;
         } else { 
             var text = cleanString(data[0].text);
-            var myobj = {tweetid:localTweetId};
+            var myobj = {tweetid:localTweetIdt};
             MongoClient.connect(url, function(err, db) {
                 
                 if (err) {
@@ -133,18 +132,18 @@ var replyToTrump = function() {
                         if (err) {
                             console.log(err);
                         } else {
-                            if(result !==null && result.tweetid === localTweetId){
+                            if(result !==null && result.tweetid === localTweetIdt){
                                 console.log("already posted/replied");
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
                                     if (err) { 
-                                        console.log(localTweetId);
+                                        console.log(localTweetIdt);
                                     } else {
-                                        console.log("inserted: " + localTweetId);
+                                        console.log("inserted: " + localTweetIdt);
                                     }
                                 });
                                 
-                                trumpid = localTweetId;
+                                trumpid = localTweetIdt;
                                 var request = require('request');
                             
                                 console.log("sending request");
@@ -197,7 +196,7 @@ var reply = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-            console.log(trumpid);
+            console.log(replyid);
             
             var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: replyid };
             
@@ -283,7 +282,7 @@ function stripList(data) {
     for (var i = 0; i < data.statuses.length; i++) {
         var status = data.statuses[i];
         if(frankscharities.indexOf(status.user.screen_name) !== -1){
-            if(status.text.indexOf(screen_name) === -1) {
+            if(status.text.indexOf(trump_screen_name) === -1) {
                 list[i] = data.statuses[i];
             }
         }
