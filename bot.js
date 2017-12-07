@@ -216,6 +216,7 @@ var reply = function() {
         console.log("getting mentions");
         var localTweetId = data[0].id_str;
         reply_screen_name = data[0].user.screen_name;
+        console.log(localTweetId);
         console.log(reply_screen_name);
         
         if(err) {
@@ -226,7 +227,7 @@ var reply = function() {
             var myobj = {tweetid:localTweetId};
             MongoClient.connect(url, function(err, db) {
                 
-                console.log("checking for previous replies")
+                console.log("checking for previous replies");
                 
                 if (err) {
                     console.log(err);
