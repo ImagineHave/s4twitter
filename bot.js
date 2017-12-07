@@ -22,12 +22,13 @@ var headers = {
 };
 
 function getOptions(text) {
-    return {
-    url: 'https://s4j.imagine-have.xyz/s4j/p/',
-    method: 'POST',
-    headers: headers,
-    form: {'prayer':  JSON.stringify( text ) }
-};
+    var options = {
+        url: 'https://s4j.imagine-have.xyz/s4j/p/',
+        method: 'POST',
+        headers: headers,
+        form: {'prayer':  JSON.stringify( text ) }};
+    return options;
+}
 
 // MongoClient.connect(url, function(err, db) {
 //     if (err) throw err;
@@ -173,19 +174,10 @@ var reply = function() {
     
     var callback = function(error, response, body) {
         if (!error && response.statusCode == 200) {
-            // Print out the response body
-            console.log(body);
-            
-            // print out the text of the tweet that came in
-            //console.log(tweet.text);
-            
-            //build our reply object
             
             body = JSON.parse(body);
-            
             var passage = body['answer']['passage'];
             var book = body['answer']['book'];
-            
             
             book = book.trim();
             
