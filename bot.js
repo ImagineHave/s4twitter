@@ -21,6 +21,14 @@ var headers = {
     'Content-Type':     'application/x-www-form-urlencoded'
 };
 
+function getOptions(text) {
+    return {
+    url: 'https://s4j.imagine-have.xyz/s4j/p/',
+    method: 'POST',
+    headers: headers,
+    form: {'prayer':  JSON.stringify( text ) }
+};
+
 // MongoClient.connect(url, function(err, db) {
 //     if (err) throw err;
 //     var dbase = db.db("heroku_npbd96ms");
@@ -67,16 +75,8 @@ var replyToTrump = function() {
     
     var callback = function(error, response, body) {
         if (!error && response.statusCode == 200) {
-            // Print out the response body
-            console.log(body);
-            
-            // print out the text of the tweet that came in
-            //console.log(tweet.text);
-            
-            //build our reply object
             
             body = JSON.parse(body);
-            
             var passage = body['answer']['passage'];
             var book = body['answer']['book'];
             
@@ -91,11 +91,7 @@ var replyToTrump = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-            console.log(trumpid);
-            
             var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: trumpid };
-            
-            console.log(statusObj);
             
             Twitter.post('statuses/update', statusObj,  function(error, tweetReply, response){
 
@@ -142,17 +138,9 @@ var replyToTrump = function() {
                                 
                                 trumpid = localTweetId;
                                 var request = require('request');
-                                
-                                // Configure the request
-                                var options = {
-                                    url: 'https://s4j.imagine-have.xyz/s4j/p/',
-                                    method: 'POST',
-                                    headers: headers,
-                                    form: {'prayer':  JSON.stringify( text ) }
-                                };
-                                
+                            
                                 console.log("sending request");
-                                request(options, callback);
+                                request(getOptions(text), callback);
                                 
                             } 
                         }
@@ -262,16 +250,8 @@ var reply = function() {
                                 replyid = localTweetId;
                                 var request = require('request');
                                 
-                                // Configure the request
-                                var options = {
-                                    url: 'https://s4j.imagine-have.xyz/s4j/p/',
-                                    method: 'POST',
-                                    headers: headers,
-                                    form: {'prayer':  JSON.stringify( text ) }
-                                };
-                                
                                 console.log("sending request");
-                                request(options, callback);
+                                request(getOptions(text), callback);
                                 
                             } 
                         }
