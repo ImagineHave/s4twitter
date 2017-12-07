@@ -183,11 +183,7 @@ var reply = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-<<<<<<< HEAD
             console.log(trumpid);
-=======
-            console.log(replyid);
->>>>>>> 9e5efdaebb42c3445c51d97bcd4052ac96722078
             
             var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: replyid };
             
