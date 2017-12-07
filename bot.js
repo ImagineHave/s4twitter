@@ -5,7 +5,7 @@ var
 
 var Twitter = new twit(config);
 
-var tweetid = 0;
+var trumpid = 0;
 var replyid = 0;
 var screen_name = 'realDonaldTrump';
 var reply_screen_name = '';
@@ -69,9 +69,9 @@ var replyToTrump = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-            console.log(tweetid);
+            console.log(trumpid);
             
-            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            var statusObj = {status: "@"+screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: trumpid };
             
             console.log(statusObj);
             
@@ -97,12 +97,12 @@ var replyToTrump = function() {
         console.log(data[0].text);
         var text = cleanString(data[0].text);
         
-        if (tweetid === data[0].id_str){
+        if (trumpid === data[0].id_str){
             console.log("already done");
             return;
         } 
         
-        tweetid = data[0].id_str;
+        trumpid = data[0].id_str;
         
         console.log(text);
         
@@ -180,9 +180,9 @@ var reply = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-            console.log(tweetid);
+            console.log(trumpid);
             
-            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: replyid };
             
             console.log(statusObj);
             
