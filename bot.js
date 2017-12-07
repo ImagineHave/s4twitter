@@ -129,6 +129,7 @@ var replyToTrump = function() {
         });
         
         if(flag){
+            console.log("exit function");
             return;
         }
 
@@ -264,6 +265,7 @@ var reply = function() {
         });
         
         if(flag){
+            console.log("exit function")
             return;
         }
 
