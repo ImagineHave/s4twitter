@@ -140,6 +140,7 @@ var replyToTrump = function() {
                             if(result !==null && result.tweetid === localTweetIdt){
                                 console.log("already posted/replied");
                             } else {
+                                var dbase = db.db("heroku_npbd96ms");
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
                                     if (err) { 
                                         console.log("error inserting id");
@@ -259,6 +260,7 @@ var reply = function() {
                                 console.log("already posted/replied");
                                 
                             } else {
+                                var dbase = db.db("heroku_npbd96ms");
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
                                     if (err) { 
                                         console.log("error inserting id");
