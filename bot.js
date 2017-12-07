@@ -30,6 +30,8 @@ function getOptions(text) {
     return options;
 }
 
+
+// Enable when you need a new database
 // MongoClient.connect(url, function(err, db) {
 //     if (err) throw err;
 //     var dbase = db.db("heroku_npbd96ms");
@@ -56,8 +58,6 @@ function franksCharities(){
 
 var replyToTrump = function() {
     
-    var alreadyExists = false; 
-
     function cleanString(input) {
         var output = "";
         for (var i=0; i<input.length; i++) {
@@ -212,8 +212,12 @@ var reply = function() {
     
     
     Twitter.get('statuses/mentions_timeline', params, function(err, data) {
+        
+        console.log("getting mentions");
         var localTweetId = data[0].id_str;
         reply_screen_name = data[0].user.screen_name;
+        console.log(reply_screen_name);
+        
         if(err) {
             console.log(err);
             return;
@@ -221,6 +225,8 @@ var reply = function() {
             var text = cleanString(data[0].text);
             var myobj = {tweetid:localTweetId};
             MongoClient.connect(url, function(err, db) {
+                
+                console.log("checking for previous replies")
                 
                 if (err) {
                     console.log(err);
