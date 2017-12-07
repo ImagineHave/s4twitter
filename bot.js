@@ -180,9 +180,9 @@ var reply = function() {
             var chapter = body['answer']['chapter'];
             var verse = body['answer']['verse'];
             
-            console.log(tweetid);
+            console.log(replyid);
             
-            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: tweetid };
+            var statusObj = {status: "@"+reply_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: replyid };
             
             console.log(statusObj);
             
