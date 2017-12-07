@@ -111,22 +111,23 @@ var replyToTrump = function() {
         console.log(data[0].text);
         var text = cleanString(data[0].text);
         
-        // if (trumpid === data[0].id_str){
-        //     console.log("already done");
-        //     return;
-        // } 
-        
+        var flag = true; 
         var myobj = { tweetid: data[0].id_str };
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbase = db.db("heroku_npbd96ms");
             dbase.collection("tweetids").findOne(myobj, function(err, result) {
                 if (err) throw err;
+                console.log(result)
                 console.log("already posted/replied");
                 db.close();
                 return;
             });
         });
+        
+        if(flag){
+            return;
+        }
 
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
@@ -205,11 +206,11 @@ var reply = function() {
             var book = body['answer']['book'];
             
             
-            book = book.trim()
+            book = book.trim();
             
             if (book.match(/^\d/)) {
                 var number = book.substring(0,1);
-                book = book.substring(1)
+                book = book.substring(1);
                 book += " " + number;
             }      
             
@@ -242,22 +243,23 @@ var reply = function() {
         console.log("mentions" + data[0]);
         var text = cleanString(data[0].text);
         
-        // if (replyid === data[0].id_str){
-        //     console.log("already done");
-        //     return;
-        // } 
-        
+        var flag = true; 
         var myobj = { tweetid: data[0].id_str };
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbase = db.db("heroku_npbd96ms");
             dbase.collection("tweetids").findOne(myobj, function(err, result) {
                 if (err) throw err;
+                console.log(result)
                 console.log("already posted/replied");
                 db.close();
                 return;
             });
         });
+        
+        if(flag){
+            return;
+        }
 
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
