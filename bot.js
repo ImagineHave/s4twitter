@@ -111,15 +111,19 @@ var replyToTrump = function() {
         console.log(data[0].text);
         var text = cleanString(data[0].text);
         
-        var flag = true; 
+        var flag = false; 
         var myobj = { tweetid: data[0].id_str };
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbase = db.db("heroku_npbd96ms");
             dbase.collection("tweetids").findOne(myobj, function(err, result) {
                 if (err) throw err;
-                console.log(result)
-                console.log("already posted/replied");
+                
+                if(result.tweetid === data[0].id_str){
+                    flag = true;
+                    console.log("already posted/replied");
+                }
+                
                 db.close();
                 return;
             });
@@ -243,15 +247,19 @@ var reply = function() {
         console.log("mentions" + data[0]);
         var text = cleanString(data[0].text);
         
-        var flag = true; 
+        var flag = false; 
         var myobj = { tweetid: data[0].id_str };
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbase = db.db("heroku_npbd96ms");
             dbase.collection("tweetids").findOne(myobj, function(err, result) {
                 if (err) throw err;
-                console.log(result)
-                console.log("already posted/replied");
+                
+                if(result.tweetid === data[0].id_str){
+                    flag = true;
+                    console.log("already posted/replied");
+                }
+                
                 db.close();
                 return;
             });
