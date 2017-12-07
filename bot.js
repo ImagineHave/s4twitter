@@ -13,7 +13,6 @@ var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'U
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
-var dbase = db.db("heroku_npbd96ms");
 
 
 // Set the headers
@@ -127,6 +126,7 @@ var replyToTrump = function() {
                 if (err) {
                     console.log(err);
                 } else {
+                    var dbase = db.db("heroku_npbd96ms");
                     dbase.collection("tweetids").findOne(myobj, function(err, result) {
                         
                         if (err) {
@@ -245,6 +245,7 @@ var reply = function() {
                 if (err) {
                     console.log(err);
                 } else {
+                    var dbase = db.db("heroku_npbd96ms");
                     dbase.collection("tweetids").findOne(myobj, function(err, result) {
                         
                         if (err) {
