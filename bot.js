@@ -110,7 +110,7 @@ var replyToTrump = function() {
     
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
-        console.log("getting mentions");
+        console.log("trump spoke");
         var localTweetId = data[0].id_str;
         reply_screen_name = data[0].user.screen_name;
         console.log(localTweetId);
