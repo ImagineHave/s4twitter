@@ -122,10 +122,9 @@ var replyToTrump = function() {
             var dbase = db.db("heroku_npbd96ms");
             dbase.collection("tweetids").findOne(myobj, function(err, result) {
                 if (err) throw err;
-                    if(Object.keys(result).length === 0 && result.constructor === Object){
-                        return;
-                }
+                console.log(result);
                 db.close();
+                return;
             });
         });
 
@@ -254,10 +253,9 @@ var reply = function() {
             var dbase = db.db("heroku_npbd96ms");
             dbase.collection("tweetids").findOne(myobj, function(err, result) {
                 if (err) throw err;
-                    if(Object.keys(result).length === 0 && result.constructor === Object){
-                        return;
-                }
+                console.log(result);
                 db.close();
+                return;
             });
         });
 
