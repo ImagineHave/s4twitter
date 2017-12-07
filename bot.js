@@ -11,8 +11,17 @@ var screen_name = 'realDonaldTrump';
 var reply_screen_name = '';
 var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
 
-//var MongoClient = require('mongodb').MongoClient;
-//var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  db.createCollection("tweetids", function(err, res) {
+    if (err) throw err;
+    console.log("Collection created!");
+    db.close();
+  });
+});
 
 function franksCharities(){
     
@@ -100,10 +109,31 @@ var replyToTrump = function() {
         console.log(data[0].text);
         var text = cleanString(data[0].text);
         
-        if (trumpid === data[0].id_str){
-            console.log("already done");
-            return;
-        } 
+        // if (trumpid === data[0].id_str){
+        //     console.log("already done");
+        //     return;
+        // } 
+        
+        var myobj = { tweetid: data[0].id_str };
+        MongoClient.connect(url, function(err, db) {
+          if (err) throw err;
+          db.collection("tweetids").findOne(myobj, function(err, result) {
+            if (err) throw err;
+            if(Object.keys(result).length === 0 && result.constructor === Object){
+                return;
+            }
+            db.close();
+          });
+        });
+
+        MongoClient.connect(url, function(err, db) {
+          if (err) throw err;
+          db.collection("tweetids").insertOne(myobj, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            db.close();
+          });
+        });
         
         trumpid = data[0].id_str;
         
@@ -209,10 +239,31 @@ var reply = function() {
         console.log("mentions" + data[0]);
         var text = cleanString(data[0].text);
         
-        if (replyid === data[0].id_str){
-            console.log("already done");
-            return;
-        } 
+        // if (replyid === data[0].id_str){
+        //     console.log("already done");
+        //     return;
+        // } 
+        
+        var myobj = { tweetid: data[0].id_str };
+        MongoClient.connect(url, function(err, db) {
+          if (err) throw err;
+          db.collection("tweetids").findOne(myobj, function(err, result) {
+            if (err) throw err;
+            if(Object.keys(result).length === 0 && result.constructor === Object){
+                return;
+            }
+            db.close();
+          });
+        });
+
+        MongoClient.connect(url, function(err, db) {
+          if (err) throw err;
+          db.collection("tweetids").insertOne(myobj, function(err, res) {
+            if (err) throw err;
+            console.log("1 document inserted");
+            db.close();
+          });
+        });
         
         replyid = data[0].id_str;
         reply_screen_name = data[0].user.screen_name;
