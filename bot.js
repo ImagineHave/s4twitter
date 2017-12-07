@@ -110,7 +110,11 @@ var replyToTrump = function() {
     
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
+        console.log("getting mentions");
         var localTweetId = data[0].id_str;
+        reply_screen_name = data[0].user.screen_name;
+        console.log(localTweetId);
+        console.log(screen_name);
         
         if(err) {
             console.log(err);
@@ -129,12 +133,15 @@ var replyToTrump = function() {
                         if (err) {
                             console.log(err);
                         } else {
-                            if(result.tweetid === localTweetId){
+                            if(result !==null && result.tweetid === localTweetId){
                                 console.log("already posted/replied");
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
-                                    if (err) throw err;
-                                    console.log("inserted: " + localTweetId);
+                                    if (err) { 
+                                        console.log(localTweetId);
+                                    } else {
+                                        console.log("inserted: " + localTweetId);
+                                    }
                                 });
                                 
                                 trumpid = localTweetId;
