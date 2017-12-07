@@ -382,6 +382,8 @@ function randomreplyToTrump() {
     if(hour > 7 && hour < 21) {
         // retweet
         replyToTrump();
+    } else {
+        console.log("Frank is sleeping");
     }
     
   var 
@@ -401,6 +403,8 @@ function randomRetweet() {
     if(hour > 7 && hour < 21) {
         // retweet
         retweet();
+    } else {
+        console.log("Frank is sleeping");
     }
     
   var 
@@ -420,6 +424,8 @@ function randomReply() {
     if(hour > 7 && hour < 3) {
         // retweet
         reply();
+    } else {
+        console.log("Frank is sleeping");
     }
     
   var 
