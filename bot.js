@@ -127,7 +127,9 @@ var replyToTrump = function() {
                 
                 if (err) {
                     console.log(err);
+                    db.close();
                 } else {
+                    db.close();
                     var dbase = db.db("heroku_npbd96ms");
                     dbase.collection("tweetids").findOne(myobj, function(err, result) {
                         
@@ -156,9 +158,9 @@ var replyToTrump = function() {
                             } 
                         }
                         console.log("exiting trump reply");
+                        db.close();
                     });
                 }
-                db.close();
             });
         }
     });
@@ -243,7 +245,9 @@ var reply = function() {
                 
                 if (err) {
                     console.log(err);
+                    db.close();
                 } else {
+                    db.close();
                     var dbase = db.db("heroku_npbd96ms");
                     dbase.collection("tweetids").findOne(myobj, function(err, result) {
                         
@@ -253,6 +257,7 @@ var reply = function() {
                         } else {
                             if(result !==null && result.tweetid === localTweetId){
                                 console.log("already posted/replied");
+                                
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
                                     if (err) { 
@@ -272,9 +277,9 @@ var reply = function() {
                             } 
                         }
                         console.log("exiting reply");
+                        db.close();
                     });
                 }
-                db.close();
             });
         }
     });        
