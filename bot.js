@@ -11,6 +11,9 @@ var screen_name = 'realDonaldTrump';
 var reply_screen_name = '';
 var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
 
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://heroku_npbd96ms:c6b0rm1kbjb4vfrj94r6tda376@ds139585.mlab.com:39585/heroku_npbd96ms";
+
 function franksCharities(){
     
     var output = [];
