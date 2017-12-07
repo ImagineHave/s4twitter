@@ -22,12 +22,11 @@ var headers = {
 };
 
 function getOptions(text) {
-    var options = {
+    return {
         url: 'https://s4j.imagine-have.xyz/s4j/p/',
         method: 'POST',
         headers: headers,
         form: {'prayer':  JSON.stringify( text ) }};
-    return options;
 }
 
 
@@ -134,6 +133,7 @@ var replyToTrump = function() {
                         
                         if (err) {
                             console.log(err);
+                            console.log("(trump) Something went wrong with: "+localTweetIdt);
                         } else {
                             if(result !==null && result.tweetid === localTweetIdt){
                                 console.log("already posted/replied");
@@ -155,6 +155,7 @@ var replyToTrump = function() {
                                 
                             } 
                         }
+                        console.log("exiting trump reply");
                     });
                 }
                 db.close();
@@ -248,6 +249,7 @@ var reply = function() {
                         
                         if (err) {
                             console.log(err);
+                            console.log("(reply) Something went wrong with: "+localTweetId);
                         } else {
                             if(result !==null && result.tweetid === localTweetId){
                                 console.log("already posted/replied");
@@ -269,6 +271,7 @@ var reply = function() {
                                 
                             } 
                         }
+                        console.log("exiting reply");
                     });
                 }
                 db.close();
@@ -310,7 +313,7 @@ var retweet = function() {
         // if there no errors
         if (!err) {
             
-            data = stripList(data)
+            data = stripList(data);
             
             if(data.length > 0) {
                 
