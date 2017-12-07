@@ -238,7 +238,7 @@ var reply = function() {
                         if (err) {
                             console.log(err);
                         } else {
-                            if(result.tweetid === localTweetId){
+                            if(result !==null && result.tweetid === localTweetId){
                                 console.log("already posted/replied");
                             } else {
                                 dbase.collection("tweetids").insertOne(myobj, function(err, res) {
