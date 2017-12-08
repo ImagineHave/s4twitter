@@ -266,7 +266,7 @@ var replyToJRM = function() {
                                     }
                                 });
                                 
-                                trumpid = localTweetIdjrm;
+                                jrmid = localTweetIdjrm;
                                 var request = require('request');
                             
                                 console.log("sending request");
