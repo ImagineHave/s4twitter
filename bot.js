@@ -6,8 +6,12 @@ var
 var Twitter = new twit(config);
 
 var trumpid = 0;
+var jrmid = 0;
+var jhid = 0;
 var replyid = 0;
 var trump_screen_name = 'realDonaldTrump';
+var jrm_screen_name = 'Jacob_Rees_Mogg';
+var jh_screen_name = 'Jeremy_Hunt';
 var reply_screen_name = '';
 var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
 
@@ -30,7 +34,7 @@ function getOptions(text) {
 }
 
 
-// Enable when you need a new database
+// database
 MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     var dbase = db.db("heroku_npbd96ms");
@@ -149,6 +153,119 @@ var replyToTrump = function() {
                                 });
                                 
                                 trumpid = localTweetIdt;
+                                var request = require('request');
+                            
+                                console.log("sending request");
+                                request(getOptions(text), callback);
+                                
+                            } 
+                        }
+                        console.log("exiting trump reply");
+                        db.close();
+                    });
+                db.close();
+                }
+            });
+        }
+    });
+};
+
+
+// === reply to jacob
+var replyToTrump = function() {
+    
+    function cleanString(input) {
+        var output = "";
+        for (var i=0; i<input.length; i++) {
+            if (input.charCodeAt(i) <= 127) {
+                output += input.charAt(i);
+            }
+        }
+        return output;
+    }
+    
+    var params = {
+        screen_name: jrm_screen_name,  
+        result_type: 'recent',
+        lang: 'en'
+    };
+    
+    var callback = function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            
+            body = JSON.parse(body);
+            var passage = body['answer']['passage'];
+            var book = body['answer']['book'];
+            
+            book = book.trim();
+            
+            if (book.match(/^\d/)) {
+                var number = book.substring(0,1);
+                book = book.substring(1);
+                book += " " + number;
+            }       
+            
+            var chapter = body['answer']['chapter'];
+            var verse = body['answer']['verse'];
+            
+            var statusObj = {status: "@"+jrm_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: jrmid };
+            
+            Twitter.post('statuses/update', statusObj,  function(error, tweetReply, response){
+
+                //if we get an error print it out
+                if(error){
+                    console.log(error);
+                }
+                
+                //print the text of the tweet we sent out
+                console.log(tweetReply.text);
+                
+            });
+        }
+    };
+    
+    
+    Twitter.get('statuses/user_timeline', params, function(err, data) {
+        console.log("trump spoke");
+        console.log(data[0].text);
+        var localTweetIdjrm = data[0].id_str;
+        console.log(localTweetIdjrm);
+        console.log(jrm_screen_name);
+        
+        if(err) {
+            console.log(err);
+            return;
+        } else { 
+            var text = cleanString(data[0].text);
+            var myobj = {tweetid:localTweetIdjrm};
+            MongoClient.connect(url, function(err, db) {
+                
+                console.log("checking for previous trump replies");
+                
+                if (err) {
+                    console.log(err);
+                } else {
+                    var dbase = db.db("heroku_npbd96ms");
+                    dbase.collection("tweetids").findOne(myobj, function(err, result) {
+                        
+                        if (err) {
+                            console.log(err);
+                            console.log("(jacob twat mogg) Something went wrong with: "+localTweetIdjrm);
+                        } else {
+                            if(result !==null && result.tweetid === localTweetIdjrm){
+                                console.log("already posted/replied");
+                            } else {
+                                var dbase = db.db("heroku_npbd96ms");
+                                dbase.collection("tweetids").insertOne(myobj, function(err, res) {
+                                    if (err) { 
+                                        console.log("error inserting id");
+                                        console.log(localTweetIdjrm);
+                                    } else {
+                                        console.log("inserted: " + localTweetIdjrm);
+                                    }
+                                });
+                                
+                                trumpid = localTweetIdjrm;
                                 var request = require('request');
                             
                                 console.log("sending request");
