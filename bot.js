@@ -7,11 +7,11 @@ var Twitter = new twit(config);
 
 var trumpid = 0;
 var jrmid = 0;
-var jhid = 0;
+var rmid = 0;
 var replyid = 0;
 var trump_screen_name = 'realDonaldTrump';
 var jrm_screen_name = 'Jacob_Rees_Mogg';
-var jh_screen_name = 'Jeremy_Hunt';
+var rm_screen_name = 'mooresenate';
 var reply_screen_name = '';
 var frankscharities = ['MSF', 'MindCharity', 'amnesty', 'SSChospices', 'hrw', 'UNHumanRights', 'macmillancancer', 'CR_UK', 'NSPCC', 'Network4Africa'];
 
@@ -284,6 +284,121 @@ var replyToJRM = function() {
 };
 
 
+// REPLY TO MOORE
+
+// === reply to jacob
+var replyToRM = function() {
+    
+    function cleanString(input) {
+        var output = "";
+        for (var i=0; i<input.length; i++) {
+            if (input.charCodeAt(i) <= 127) {
+                output += input.charAt(i);
+            }
+        }
+        return output;
+    }
+    
+    var params = {
+        screen_name: rm_screen_name,  
+        result_type: 'recent',
+        lang: 'en'
+    };
+    
+    var callback = function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            
+            body = JSON.parse(body);
+            var passage = body['answer']['passage'];
+            var book = body['answer']['book'];
+            
+            book = book.trim();
+            
+            if (book.match(/^\d/)) {
+                var number = book.substring(0,1);
+                book = book.substring(1);
+                book += " " + number;
+            }       
+            
+            var chapter = body['answer']['chapter'];
+            var verse = body['answer']['verse'];
+            
+            var statusObj = {status: "@"+rm_screen_name+" \""+passage+"\" "+book+" "+chapter+":"+verse, in_reply_to_status_id: rmid };
+            
+            Twitter.post('statuses/update', statusObj,  function(error, tweetReply, response){
+
+                //if we get an error print it out
+                if(error){
+                    console.log(error);
+                }
+                
+                //print the text of the tweet we sent out
+                console.log(tweetReply.text);
+                
+            });
+        }
+    };
+    
+    
+    Twitter.get('statuses/user_timeline', params, function(err, data) {
+        console.log("rm spoke");
+        console.log(data[0].text);
+        var localTweetIdrm = data[0].id_str;
+        console.log(localTweetIdrm);
+        console.log(rm_screen_name);
+        
+        if(err) {
+            console.log(err);
+            return;
+        } else { 
+            var text = cleanString(data[0].text);
+            var myobj = {tweetid:localTweetIdrm};
+            MongoClient.connect(url, function(err, db) {
+                
+                console.log("checking for previous rm replies");
+                
+                if (err) {
+                    console.log(err);
+                } else {
+                    var dbase = db.db("heroku_npbd96ms");
+                    dbase.collection("tweetids").findOne(myobj, function(err, result) {
+                        
+                        if (err) {
+                            console.log(err);
+                            console.log("(roy paedo moore) Something went wrong with: "+localTweetIdrm);
+                        } else {
+                            if(result !==null && result.tweetid === localTweetIdrm){
+                                console.log("already posted/replied");
+                            } else {
+                                var dbase = db.db("heroku_npbd96ms");
+                                dbase.collection("tweetids").insertOne(myobj, function(err, res) {
+                                    if (err) { 
+                                        console.log("error inserting id");
+                                        console.log(localTweetIdrm);
+                                        console.log(err)
+                                    } else {
+                                        console.log("inserted: " + localTweetIdrm);
+                                    }
+                                });
+                                
+                                jrmid = localTweetIdrm;
+                                var request = require('request');
+                            
+                                console.log("sending request");
+                                request(getOptions(text), callback);
+                                
+                            } 
+                        }
+                        console.log("exiting rm reply");
+                        db.close();
+                    });
+                }
+            });
+        }
+    });
+};
+
+
 // REPLY TO ANYONE STUFF
 
 var reply = function() {
@@ -514,6 +629,28 @@ function randomreplyToJRM() {
   setTimeout(randomreplyToJRM, rand);
 }
 randomreplyToJRM();
+
+
+function randomreplyToRM() {
+    
+    var hour = new Date().getHours();
+    // if the time is between 7am and 9pm
+    if(hour > 7 && hour < 21) {
+        // retweet
+        replyToRM();
+    } else {
+        console.log("Frank is sleeping");
+    }
+    
+  var 
+    min = 3000,
+    max = 30000;
+    
+  var rand = Math.floor(Math.random() * (max - min + 1) + min); 
+  console.log("Timeout replyToJRM for : " + rand);
+  setTimeout(randomreplyToRM, rand);
+}
+randomreplyToRM();
 
 function randomRetweet() {
     
