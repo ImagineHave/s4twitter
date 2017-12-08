@@ -172,7 +172,7 @@ var replyToTrump = function() {
 
 
 // === reply to jacob
-var replyToTrump = function() {
+var replyToJRM = function() {
     
     function cleanString(input) {
         var output = "";
@@ -470,6 +470,7 @@ var retweet = function() {
 
 
 replyToTrump();
+replyToJRM();
 retweet();
 reply();
 
@@ -493,6 +494,27 @@ function randomreplyToTrump() {
   setTimeout(randomreplyToTrump, rand);
 }
 randomreplyToTrump();
+
+function randomreplyToJRM() {
+    
+    var hour = new Date().getHours();
+    // if the time is between 7am and 9pm
+    if(hour > 7 && hour < 21) {
+        // retweet
+        replyToTrump();
+    } else {
+        console.log("Frank is sleeping");
+    }
+    
+  var 
+    min = 1000,
+    max = 10000;
+    
+  var rand = Math.floor(Math.random() * (max - min + 1) + min); 
+  console.log("Timeout replyToJRM for : " + rand);
+  setTimeout(randomreplyToJRM, rand);
+}
+randomreplyToJRM();
 
 function randomRetweet() {
     
