@@ -164,7 +164,6 @@ var replyToTrump = function() {
                         console.log("exiting trump reply");
                         db.close();
                     });
-                db.close();
                 }
             });
         }
@@ -278,7 +277,6 @@ var replyToJRM = function() {
                         console.log("exiting jrm reply");
                         db.close();
                     });
-                db.close();
                 }
             });
         }
@@ -397,7 +395,6 @@ var reply = function() {
                         console.log("exiting reply");
                         db.close();
                     });
-                    db.close();
                 }
             });
         }
