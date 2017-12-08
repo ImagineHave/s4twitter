@@ -507,8 +507,8 @@ function randomreplyToJRM() {
     }
     
   var 
-    min = 1000,
-    max = 10000;
+    min = 3000,
+    max = 30000;
     
   var rand = Math.floor(Math.random() * (max - min + 1) + min); 
   console.log("Timeout replyToJRM for : " + rand);
