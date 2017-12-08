@@ -147,6 +147,7 @@ var replyToTrump = function() {
                                     if (err) { 
                                         console.log("error inserting id");
                                         console.log(localTweetIdt);
+                                        console.log(err)
                                     } else {
                                         console.log("inserted: " + localTweetIdt);
                                     }
@@ -260,6 +261,7 @@ var replyToJRM = function() {
                                     if (err) { 
                                         console.log("error inserting id");
                                         console.log(localTweetIdjrm);
+                                        console.log(err)
                                     } else {
                                         console.log("inserted: " + localTweetIdjrm);
                                     }
@@ -541,7 +543,7 @@ function randomReply() {
     
     var hour = new Date().getHours();
     // if the time is between 7am and 9pm
-    if(hour > 7 && hour < 3) {
+    if(hour > 7 && hour < 22) {
         // retweet
         reply();
     } else {
