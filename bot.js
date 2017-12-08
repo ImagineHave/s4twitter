@@ -226,7 +226,7 @@ var replyToJRM = function() {
     
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
-        console.log("trump spoke");
+        console.log("jrm spoke");
         console.log(data[0].text);
         var localTweetIdjrm = data[0].id_str;
         console.log(localTweetIdjrm);
