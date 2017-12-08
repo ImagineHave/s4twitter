@@ -501,7 +501,7 @@ function randomreplyToJRM() {
     // if the time is between 7am and 9pm
     if(hour > 7 && hour < 21) {
         // retweet
-        replyToTrump();
+        replyToJRM();
     } else {
         console.log("Frank is sleeping");
     }
