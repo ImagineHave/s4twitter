@@ -23,7 +23,7 @@ var headers = {
 
 function getOptions(text) {
     return {
-        url: 'https://s4j.imagine-have.xyz/s4j/p/',
+        url: 'https://django4j.imagine-have.xyz/s4j/p/',
         method: 'POST',
         headers: headers,
         form: {'prayer':  JSON.stringify( text ) }};
