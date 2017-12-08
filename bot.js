@@ -240,7 +240,7 @@ var replyToJRM = function() {
             var myobj = {tweetid:localTweetIdjrm};
             MongoClient.connect(url, function(err, db) {
                 
-                console.log("checking for previous trump replies");
+                console.log("checking for previous jrm replies");
                 
                 if (err) {
                     console.log(err);
@@ -273,7 +273,7 @@ var replyToJRM = function() {
                                 
                             } 
                         }
-                        console.log("exiting trump reply");
+                        console.log("exiting jrm reply");
                         db.close();
                     });
                 db.close();
