@@ -147,7 +147,7 @@ var replyToTrump = function() {
                                     if (err) { 
                                         console.log("error inserting id");
                                         console.log(localTweetIdt);
-                                        console.log(err)
+                                        console.log(err);
                                     } else {
                                         console.log("inserted: " + localTweetIdt);
                                     }
@@ -260,7 +260,7 @@ var replyToJRM = function() {
                                     if (err) { 
                                         console.log("error inserting id");
                                         console.log(localTweetIdjrm);
-                                        console.log(err)
+                                        console.log(err);
                                     } else {
                                         console.log("inserted: " + localTweetIdjrm);
                                     }
@@ -375,13 +375,13 @@ var replyToRM = function() {
                                     if (err) { 
                                         console.log("error inserting id");
                                         console.log(localTweetIdrm);
-                                        console.log(err)
+                                        console.log(err);
                                     } else {
                                         console.log("inserted: " + localTweetIdrm);
                                     }
                                 });
                                 
-                                jrmid = localTweetIdrm;
+                                rmid = localTweetIdrm;
                                 var request = require('request');
                             
                                 console.log("sending request");
