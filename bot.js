@@ -342,8 +342,8 @@ var replyToRM = function() {
     
     Twitter.get('statuses/user_timeline', params, function(err, data) {
         
-        if(typeof data[0].text == 'undefined') {
-            console.error('rm text is undefined');
+        if(typeof data[0] == 'undefined') {
+            console.error('rm data is undefined');
             return;
         }
         
