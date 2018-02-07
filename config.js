@@ -6,7 +6,6 @@
  * access_token_secret
  */
  
-console.error(process.env.CONSUMER_KEY) 
 module.exports = {
   consumer_key: process.env.CONSUMER_KEY,  
   consumer_secret: process.env.CONSUMER_SECRET,

@@ -555,7 +555,7 @@ var retweet = function() {
                 
                 var 
                     min = 0,
-                    max = data.length;
+                    max = data.length -1;
                 
                 // randomise the charity
                 var i = Math.floor(Math.random() * (max - min) + min); 
