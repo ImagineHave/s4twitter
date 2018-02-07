@@ -1,4 +1,4 @@
-Z//config.js
+//config.js
 /** TWITTER APP CONFIGURATION
  * consumer_key
  * consumer_secret
